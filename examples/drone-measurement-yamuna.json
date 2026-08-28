@@ -1,0 +1,10 @@
+{
+  "lat": "28.70",
+  "lon": "77.22",
+  "turbidity": "14.2",
+  "image_hash": "sha256:demo-yamuna-frame-001",
+  "flight_id": "yamuna-drone-001",
+  "sensor_id": 1,
+  "unit": "NTU",
+  "site": "Yamuna Wazirabad barrage, Delhi NCR, India"
+}
