@@ -31,7 +31,7 @@ node fund-relayer-osmosis.mjs
 
 ```bash
 npm install
-GATEWAY_URL=https://aquachain-gateway.interchouette.net \
+GATEWAY_URL=https://x402.interchouette.net \
 EVM_PRIVATE_KEY=0xYOUR_BASE_SEPOLIA_KEY \
 node drone-agent.mjs
 ```

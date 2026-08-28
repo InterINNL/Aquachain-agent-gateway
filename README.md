@@ -68,9 +68,9 @@ Public URL: **`https://aquachain-gateway.interchouette.net`** (custom domain; TL
 
 ### Custom domain (DNS)
 
-| Type | Name | Target |
-| --- | --- | --- |
-| CNAME | `aquachain-gateway` | `aquachain-agent-gateway.onrender.com` |
+| Type  | Name                | Target                                 |
+| ----- | ------------------- | -------------------------------------- |
+| CNAME | `x402` | `aquachain-agent-gateway.onrender.com` |
 
 After the CNAME propagates, attach the hostname on the gateway web service and set:
 
