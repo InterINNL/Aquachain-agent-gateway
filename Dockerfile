@@ -11,9 +11,9 @@ WORKDIR /relay
 COPY scripts/package.json scripts/package-lock.json ./
 RUN npm ci --omit=dev
 
-FROM debian:bookworm-slim AS runtime
+FROM node:22-bookworm-slim AS runtime
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates nodejs \
+  && apt-get install -y --no-install-recommends ca-certificates \
   && rm -rf /var/lib/apt/lists/* \
   && useradd -r -u 10001 -m -d /app appuser
 WORKDIR /app

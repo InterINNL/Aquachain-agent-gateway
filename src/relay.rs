@@ -111,13 +111,19 @@ pub async fn relay_measurement(
         .context("wait for relay script")?;
 
     let stdout = String::from_utf8_lossy(&output.stdout);
+    let stderr = String::from_utf8_lossy(&output.stderr);
     let parsed: RelayScriptOk = serde_json::from_str(stdout.trim()).unwrap_or(RelayScriptOk {
         ok: false,
         tx_hash: None,
         error: Some(format!(
-            "invalid relay output (exit {}): {}",
+            "invalid relay output (exit {}): {}{}",
             output.status.code().unwrap_or(1),
-            stdout.trim()
+            stdout.trim(),
+            if stderr.trim().is_empty() {
+                String::new()
+            } else {
+                format!(" stderr: {}", stderr.trim())
+            }
         )),
     });
 
