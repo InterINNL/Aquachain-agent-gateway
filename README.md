@@ -62,15 +62,26 @@ See [`.env.example`](.env.example). Secrets stay local (relayer mnemonic, pay-to
 
 Osmosis relay uses [`scripts/relay-submit-data.mjs`](scripts/relay-submit-data.mjs) (CosmJS bundled under `scripts/`).
 
-## Production (Render)
+## Production
 
-1. Connect repo [InterINNL/Aquachain-agent-gateway](https://github.com/InterINNL/Aquachain-agent-gateway) on Render (Frankfurt).
-2. Use [`render.yaml`](render.yaml) or **Docker** with [`Dockerfile`](Dockerfile).
-3. Set secrets in the Render dashboard (never commit):
-   - `RELAYER_MNEMONIC` - Osmosis relayer with test OSMO
-   - `X402_PAYTO_ADDRESS` - Base Sepolia EVM address for USDC
-4. Set `AGENT_GATEWAY_PUBLIC_URL` to the service URL (no trailing slash).
-5. Point the frontend prod env `agentGatewayUrl` at the same URL and redeploy the static site.
+Public URL: **`https://aquachain-gateway.interchouette.net`** (custom domain; TLS via hosting provider).
+
+### Custom domain (DNS)
+
+| Type | Name | Target |
+| --- | --- | --- |
+| CNAME | `aquachain-gateway` | `aquachain-agent-gateway.onrender.com` |
+
+After the CNAME propagates, attach the hostname on the gateway web service and set:
+
+`AGENT_GATEWAY_PUBLIC_URL=https://aquachain-gateway.interchouette.net`
+
+Point the frontend prod env `agentGatewayUrl` at the same URL (no trailing slash). x402 `resource` URLs in 402 responses use this value; it must match the URL agents call.
+
+Set secrets in the hosting dashboard (never commit):
+
+- `RELAYER_MNEMONIC` - Osmosis relayer with test OSMO
+- `X402_PAYTO_ADDRESS` - Base Sepolia EVM address for USDC
 
 Health check: `GET /health`. Capabilities: `GET /v1/capabilities`.
 

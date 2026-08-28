@@ -12,7 +12,7 @@ services:
       - key: AGENT_GATEWAY_HOST
         value: 0.0.0.0
       - key: AGENT_GATEWAY_PUBLIC_URL
-        value: https://aquachain-agent-gateway.onrender.com
+        value: https://aquachain-gateway.interchouette.net
       - key: CSR_CONTRACT_ADDRESS
         value: osmo1s2a2f6je78ga2atc3rzq76lmzs9kane9h9fa3w62rjvcw5mk5lvsyxwtm4
       - key: OSMOSIS_RPC

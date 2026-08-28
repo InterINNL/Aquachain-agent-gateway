@@ -4,7 +4,7 @@
  *
  *   cd aquachain/agent-gateway/examples
  *   npm install
- *   GATEWAY_URL=https://aquachain-agent-gateway.onrender.com \
+ *   GATEWAY_URL=https://aquachain-gateway.interchouette.net \
  *   EVM_PRIVATE_KEY=0x… \
  *   node drone-agent.mjs
  */
