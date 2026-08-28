@@ -60,7 +60,19 @@ See [`.env.example`](.env.example). Secrets stay local (relayer mnemonic, pay-to
 | `CSR_CONTRACT_ADDRESS` | Osmosis citizen-science-registry   |
 | `RELAYER_MNEMONIC`     | Signs Osmosis `submit_data`        |
 
-Osmosis relay uses [`scripts/relay-submit-data.mjs`](scripts/relay-submit-data.mjs) (CosmJS from the Nx `www/` workspace).
+Osmosis relay uses [`scripts/relay-submit-data.mjs`](scripts/relay-submit-data.mjs) (CosmJS bundled under `scripts/`).
+
+## Production (Render)
+
+1. Connect repo [InterINNL/Aquachain-agent-gateway](https://github.com/InterINNL/Aquachain-agent-gateway) on Render (Frankfurt).
+2. Use [`render.yaml`](render.yaml) or **Docker** with [`Dockerfile`](Dockerfile).
+3. Set secrets in the Render dashboard (never commit):
+   - `RELAYER_MNEMONIC` - Osmosis relayer with test OSMO
+   - `X402_PAYTO_ADDRESS` - Base Sepolia EVM address for USDC
+4. Set `AGENT_GATEWAY_PUBLIC_URL` to the service URL (no trailing slash).
+5. Point the frontend prod env `agentGatewayUrl` at the same URL and redeploy the static site.
+
+Health check: `GET /health`. Capabilities: `GET /v1/capabilities`.
 
 ## API
 

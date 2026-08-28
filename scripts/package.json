@@ -1,0 +1,9 @@
+{
+  "name": "aquachain-agent-gateway-relay",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "^0.39.0",
+    "@cosmjs/proto-signing": "^0.39.0"
+  }
+}

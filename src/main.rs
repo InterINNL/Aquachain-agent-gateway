@@ -32,7 +32,7 @@ async fn main() -> Result<()> {
 
     let addr = config.bind_addr();
     let listener = TcpListener::bind(&addr).await?;
-    tracing::info!(%addr, phase = "g0", "agent gateway listening");
+    tracing::info!(%addr, phase = "g1", "agent gateway listening");
 
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown_signal())

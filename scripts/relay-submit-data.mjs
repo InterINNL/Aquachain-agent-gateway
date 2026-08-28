@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 
 const require = createRequire(
-  resolve(dirname(fileURLToPath(import.meta.url)), "../../../www/package.json"),
+  resolve(dirname(fileURLToPath(import.meta.url)), "package.json"),
 );
 
 const { SigningCosmWasmClient } = require("@cosmjs/cosmwasm-stargate");

@@ -33,10 +33,11 @@ impl GatewayConfig {
     /// # Errors
     /// Returns an error when `AGENT_GATEWAY_PORT` is not a valid u16.
     pub fn from_env() -> Result<Self> {
-        let port = env::var("AGENT_GATEWAY_PORT")
+        let port = env::var("PORT")
+            .or_else(|_| env::var("AGENT_GATEWAY_PORT"))
             .unwrap_or_else(|_| "8081".into())
             .parse::<u16>()
-            .context("AGENT_GATEWAY_PORT must be a valid port number")?;
+            .context("PORT / AGENT_GATEWAY_PORT must be a valid port number")?;
 
         Ok(Self {
             host: env::var("AGENT_GATEWAY_HOST").unwrap_or_else(|_| "0.0.0.0".into()),
@@ -181,11 +182,35 @@ mod tests {
     }
 
     #[test]
+    fn port_from_render_env() {
+        let prev_port = env::var("PORT").ok();
+        let prev_gateway = env::var("AGENT_GATEWAY_PORT").ok();
+        env::set_var("PORT", "10000");
+        env::remove_var("AGENT_GATEWAY_PORT");
+        let cfg = GatewayConfig::from_env().expect("from_env");
+        match prev_port {
+            Some(v) => env::set_var("PORT", v),
+            None => env::remove_var("PORT"),
+        }
+        match prev_gateway {
+            Some(v) => env::set_var("AGENT_GATEWAY_PORT", v),
+            None => env::remove_var("AGENT_GATEWAY_PORT"),
+        }
+        assert_eq!(cfg.port, 10000);
+    }
+
+    #[test]
     fn invalid_port_errors() {
-        let prev = env::var("AGENT_GATEWAY_PORT").ok();
+        let prev_port = env::var("PORT").ok();
+        let prev_gateway = env::var("AGENT_GATEWAY_PORT").ok();
+        env::remove_var("PORT");
         env::set_var("AGENT_GATEWAY_PORT", "not-a-port");
         let err = GatewayConfig::from_env().unwrap_err();
-        match prev {
+        match prev_port {
+            Some(v) => env::set_var("PORT", v),
+            None => env::remove_var("PORT"),
+        }
+        match prev_gateway {
             Some(v) => env::set_var("AGENT_GATEWAY_PORT", v),
             None => env::remove_var("AGENT_GATEWAY_PORT"),
         }
