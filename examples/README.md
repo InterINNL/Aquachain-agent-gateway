@@ -17,14 +17,24 @@ curl -sS -X POST http://localhost:8081/v1/measurements \
 
 ## x402 drone agent (G1)
 
+Fund the payer wallet on **Base Sepolia testnet** (chain id 84532):
+
+1. Test ETH for gas: https://www.alchemy.com/faucets/base-sepolia
+2. Test USDC: https://faucet.circle.com/ (pick Base Sepolia)
+
+Fund the gateway relayer on **Osmosis osmo-test-5** when relay returns queued/failed:
+
+```bash
+cd ../../contracts/scripts
+node fund-relayer-osmosis.mjs
+```
+
 ```bash
 npm install
-GATEWAY_URL=http://localhost:8081 \
+GATEWAY_URL=https://aquachain-agent-gateway.onrender.com \
 EVM_PRIVATE_KEY=0xYOUR_BASE_SEPOLIA_KEY \
 node drone-agent.mjs
 ```
-
-Fund the agent with Base Sepolia USDC before running. The script pays ~$0.01 USDC per measurement via x402, then the gateway relays to Osmosis when `RELAYER_MNEMONIC` is configured.
 
 ## Payload
 

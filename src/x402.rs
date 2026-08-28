@@ -64,7 +64,17 @@ pub fn build_payment_requirements(config: &GatewayConfig, resource_path: &str) -
         "payTo": config.payto_address,
         "asset": config.x402_asset_address(),
         "resource": resource,
-        "maxTimeoutSeconds": 300
+        "maxTimeoutSeconds": 300,
+        "description": "Submit drone reading; relay to citizen-science-registry on Osmosis",
+    })
+}
+
+/// Builds the x402 v1 PaymentRequired object for HTTP 402 clients.
+pub fn build_payment_required_v1(config: &GatewayConfig, resource_path: &str) -> Value {
+    json!({
+        "x402Version": 1,
+        "error": "Payment Required",
+        "accepts": [build_payment_requirements(config, resource_path)],
     })
 }
 
@@ -77,7 +87,6 @@ pub fn payment_required_response(
         "{}{resource_path}",
         config.public_base_url().trim_end_matches('/')
     );
-    let requirements = build_payment_requirements(config, resource_path);
     let body = PaymentRequiredBody {
         error: "Payment Required".into(),
         message: "This endpoint requires x402 USDC payment before relaying to Osmosis.".into(),
@@ -88,7 +97,8 @@ pub fn payment_required_response(
         facilitator: config.facilitator_url.clone(),
         resource: resource.clone(),
     };
-    let header = STANDARD.encode(requirements.to_string());
+    let payment_required = build_payment_required_v1(config, resource_path);
+    let header = STANDARD.encode(payment_required.to_string());
     (body, header)
 }
 
@@ -256,15 +266,20 @@ mod tests {
     }
 
     #[test]
-    fn payment_required_includes_price_and_network() {
+    fn payment_required_includes_v1_wrapper() {
         let (body, header) = payment_required_response(&test_config(), "/v1/measurements");
         assert_eq!(body.price, "$0.01");
         assert_eq!(body.network, "base-sepolia");
         assert!(!header.is_empty());
         let decoded = STANDARD.decode(header).unwrap();
         let v: Value = serde_json::from_slice(&decoded).unwrap();
-        assert_eq!(v["network"], "base-sepolia");
-        assert_eq!(v["maxAmountRequired"], "10000");
+        assert_eq!(v["x402Version"], 1);
+        assert_eq!(v["accepts"][0]["network"], "base-sepolia");
+        assert_eq!(v["accepts"][0]["maxAmountRequired"], "10000");
+        assert_eq!(
+            v["accepts"][0]["description"],
+            "Submit drone reading; relay to citizen-science-registry on Osmosis"
+        );
     }
 
     #[test]
