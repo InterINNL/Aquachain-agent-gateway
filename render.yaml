@@ -20,7 +20,7 @@ services:
       - key: OSMOSIS_CHAIN_ID
         value: osmo-test-5
       - key: X402_DEV_BYPASS
-        value: 'false'
+        value: "false"
       - key: RELAYER_MNEMONIC
         sync: false
       - key: X402_PAYTO_ADDRESS

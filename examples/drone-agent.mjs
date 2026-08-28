@@ -24,7 +24,9 @@ const gatewayUrl = (process.env.GATEWAY_URL ?? "http://localhost:8081").replace(
 );
 const privateKey = process.env.EVM_PRIVATE_KEY?.trim();
 if (!privateKey) {
-  console.error("Set EVM_PRIVATE_KEY (Base Sepolia account with USDC + ETH for gas)");
+  console.error(
+    "Set EVM_PRIVATE_KEY (Base Sepolia account with USDC + ETH for gas)",
+  );
   process.exit(1);
 }
 

@@ -66,6 +66,10 @@ pub fn build_payment_requirements(config: &GatewayConfig, resource_path: &str) -
         "resource": resource,
         "maxTimeoutSeconds": 300,
         "description": "Submit drone reading; relay to citizen-science-registry on Osmosis",
+        "extra": {
+            "name": "USDC",
+            "version": "2"
+        }
     })
 }
 
@@ -102,6 +106,15 @@ pub fn payment_required_response(
     (body, header)
 }
 
+/// Decodes a base64 payment signature header into a JSON payload for the facilitator.
+fn decode_payment_payload(payment_header: &str) -> Result<Value> {
+    let decoded = STANDARD
+        .decode(payment_header.trim())
+        .context("decode payment signature header")?;
+    let text = String::from_utf8(decoded).context("payment signature header utf8")?;
+    serde_json::from_str(&text).context("parse payment payload json")
+}
+
 /// Returns true when a payment header is present.
 pub fn has_payment_header(headers: &axum::http::HeaderMap) -> bool {
     payment_header_value(headers).is_some()
@@ -126,9 +139,11 @@ pub async fn verify_payment(
     resource_path: &str,
 ) -> Result<PaymentSession, PaymentError> {
     let requirements = build_payment_requirements(config, resource_path);
+    let payment_payload = decode_payment_payload(payment_header)
+        .map_err(|e| PaymentError::VerifyFailed(e.to_string()))?;
     let body = json!({
         "x402Version": 1,
-        "paymentHeader": payment_header,
+        "paymentPayload": payment_payload,
         "paymentRequirements": requirements
     });
 
@@ -182,9 +197,11 @@ pub async fn settle_payment(
     config: &GatewayConfig,
     session: &PaymentSession,
 ) -> Result<Value, PaymentError> {
+    let payment_payload = decode_payment_payload(&session.payment_header)
+        .map_err(|e| PaymentError::SettleFailed(e.to_string()))?;
     let body = json!({
         "x402Version": 1,
-        "paymentHeader": session.payment_header,
+        "paymentPayload": payment_payload,
         "paymentRequirements": session.requirements
     });
 
@@ -280,6 +297,8 @@ mod tests {
             v["accepts"][0]["description"],
             "Submit drone reading; relay to citizen-science-registry on Osmosis"
         );
+        assert_eq!(v["accepts"][0]["extra"]["name"], "USDC");
+        assert_eq!(v["accepts"][0]["extra"]["version"], "2");
     }
 
     #[test]
