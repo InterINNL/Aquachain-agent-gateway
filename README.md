@@ -68,5 +68,5 @@ Full spec: [`docs/api.md`](docs/api.md).
 
 ## Related
 
-- Contracts: [`../contracts/`](../contracts/)
-- Frontend: [`../../www/apps/aquachain/`](../../www/apps/aquachain/)
+- [Aquachain-contracts](https://github.com/InterINNL/Aquachain-contracts)
+- [Frontend](https://github.com/InterINNL/frontend)
