@@ -64,7 +64,7 @@ Osmosis relay uses [`scripts/relay-submit-data.mjs`](scripts/relay-submit-data.m
 
 ## Production
 
-Public URL: **`https://aquachain-gateway.interchouette.net`** (custom domain; TLS via hosting provider).
+Public URL: **`https://x402.interchouette.net`** (custom domain; TLS via hosting provider).
 
 ### Custom domain (DNS)
 
@@ -74,7 +74,7 @@ Public URL: **`https://aquachain-gateway.interchouette.net`** (custom domain; TL
 
 After the CNAME propagates, attach the hostname on the gateway web service and set:
 
-`AGENT_GATEWAY_PUBLIC_URL=https://aquachain-gateway.interchouette.net`
+`AGENT_GATEWAY_PUBLIC_URL=https://x402.interchouette.net`
 
 Point the frontend prod env `agentGatewayUrl` at the same URL (no trailing slash). x402 `resource` URLs in 402 responses use this value; it must match the URL agents call.
 
