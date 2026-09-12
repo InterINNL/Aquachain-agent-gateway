@@ -3,6 +3,7 @@ name = "aquachain-agent-gateway"
 version = "0.1.0"
 edition = "2021"
 description = "x402 agent gateway for AquaChain drone measurements (relays to Osmosis CosmWasm)"
+license = "Apache-2.0"
 publish = false
 
 [dependencies]
